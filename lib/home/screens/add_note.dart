@@ -1,103 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:notes2_app/home/models/task.dart';
+import 'package:notes2_app/home/provider/task_provider.dart';
+import 'package:provider/provider.dart';
 
-class AddNote extends StatelessWidget {
-  const AddNote({super.key});
+
+class AddTask extends StatelessWidget {
+  const AddTask({super.key});
+
   @override
   Widget build(BuildContext context) {
     TextEditingController titleController = TextEditingController();
     TextEditingController contentController = TextEditingController();
+
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
-      body: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.purple,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
-                    ),
-                    Text(
-                      "ملاحظه جديده",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                    ),
-                    TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                          Colors.purple[300],
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.check_circle_outline, color: Colors.white),
-                          SizedBox(width: 5),
-                          Text(
-                            "حفظ",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.purple,
+        title: const Text(
+          "مهمة جديدة",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
           ),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TextFormField(
-              controller: titleController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
-                ),
-                prefixIcon: Icon(Icons.title, color: Colors.purple),
-                hintText: 'العنوان',
-                filled: true,
-                fillColor: Colors.blueGrey[50],
-              ),
-            ),
-          ),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TextFormField(
-              controller: contentController,
-              maxLines: 20,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: 'اكتب ملاحظتك هنا ....',
-                filled: true,
-                fillColor: Colors.blueGrey[50],
-              ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (titleController.text.isNotEmpty) {
+                Provider.of<TaskProvider>(context, listen: false).addTask(
+                  Task(
+                    title: titleController.text,
+                    content: contentController.text,
+                  ),
+                );
+                Navigator.pop(context);
+              }
+            },
+            child: const Text(
+              "حفظ",
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
         ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                labelText: 'عنوان المهمة',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: contentController,
+              decoration: const InputDecoration(
+                labelText: 'تفاصيل المهمة',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 5,
+            ),
+          ],
+        ),
       ),
     );
   }

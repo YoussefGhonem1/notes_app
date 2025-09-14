@@ -1,113 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:notes2_app/home/models/task.dart';
+import 'package:notes2_app/home/provider/task_provider.dart';
+import 'package:provider/provider.dart';
 
-class EditNote extends StatelessWidget {
-  final String oldTitle;
-  final String oldContent;
 
-  const EditNote({
-    super.key,
-    required this.oldTitle,
-    required this.oldContent,
-  });
+class EditTask extends StatelessWidget {
+  final Task task;
+
+  const EditTask({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController titleController = TextEditingController(text: oldTitle);
-    TextEditingController contentController = TextEditingController(text: oldContent);
+    TextEditingController titleController = TextEditingController(text: task.title);
+    TextEditingController contentController = TextEditingController(text: task.content);
 
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
-      body: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.purple,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-            ),
-            child: Column(
-              children: [
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    ),
-                    const Text(
-                      "تعديل الملاحظة",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                    ),
-                    TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                          Colors.purple[300],
-                        ),
-                      ),
-                      onPressed: () {
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.check_circle_outline, color: Colors.white),
-                          SizedBox(width: 5),
-                          Text(
-                            "تحديث",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.purple,
+        title: const Text(
+          "تعديل المهمة",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
           ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TextFormField(
-              controller: titleController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
-                ),
-                prefixIcon: const Icon(Icons.title, color: Colors.purple),
-                hintText: 'العنوان',
-                filled: true,
-                fillColor: Colors.blueGrey[50],
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TextFormField(
-              controller: contentController,
-              maxLines: 20,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: 'اكتب ملاحظتك هنا ....',
-                filled: true,
-                fillColor: Colors.blueGrey[50],
-              ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (titleController.text.isNotEmpty) {
+                task.title = titleController.text;
+                task.content = contentController.text;
+                task.save();
+                Provider.of<TaskProvider>(context, listen: false).getTasks();
+                Navigator.pop(context);
+              }
+            },
+            child: const Text(
+              "تحديث",
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
         ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                labelText: 'عنوان المهمة',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: contentController,
+              decoration: const InputDecoration(
+                labelText: 'تفاصيل المهمة',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 5,
+            ),
+          ],
+        ),
       ),
     );
   }

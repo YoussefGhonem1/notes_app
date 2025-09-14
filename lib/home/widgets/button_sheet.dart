@@ -1,58 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:notes2_app/home/models/task.dart';
+import 'package:notes2_app/home/provider/task_provider.dart';
 import 'package:notes2_app/home/screens/edit_note.dart';
+import 'package:provider/provider.dart';
+
 
 class NoteOptionsSheet extends StatelessWidget {
-  const NoteOptionsSheet({super.key});
+  final Task task;
+  const NoteOptionsSheet({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: 12),
-          ListTile(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-            ),
-            tileColor: Colors.blue[50],
-            leading: CircleAvatar(
-              backgroundColor: Colors.blue[100],
-              child: const Icon(Icons.edit, color: Colors.blue),
-            ),
-            title: const Text(
-              'تعديل الملاحظة',
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      EditNote(oldTitle: "Text", oldContent: "Text one"),
-                ),
-              );
-            },
-          ),
-          SizedBox(height: 8),
-          ListTile(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-            ),
-            tileColor: Colors.red[50],
-            leading: CircleAvatar(
-              backgroundColor: Colors.red[100],
-              child: const Icon(Icons.delete, color: Colors.red),
-            ),
-            title: const Text(
-              'حذف الملاحظة',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-            ),
-            onTap: () {},
-          ),
-        ],
-      ),
+    return Wrap(
+      children: <Widget>[
+        ListTile(
+          leading: const Icon(Icons.edit),
+          title: const Text('تعديل'),
+          onTap: () {
+            Navigator.pop(context); 
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditTask(task: task),
+              ),
+            );
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.delete),
+          title: const Text('حذف'),
+          onTap: () {
+            Provider.of<TaskProvider>(context, listen: false).deleteTask(task);
+            Navigator.pop(context); // Close the bottom sheet
+          },
+        ),
+      ],
     );
   }
 }

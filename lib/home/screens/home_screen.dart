@@ -13,11 +13,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     Provider.of<TaskProvider>(context, listen: false).getTasks();
+    _searchController.addListener(() {
+      Provider.of<TaskProvider>(context, listen: false)
+          .filterTasks(_searchController.text);
+    });
   }
+
+    @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 12),
                     TextFormField(
+                      controller: _searchController,
                       decoration: InputDecoration(
                         hintText: "ابحث عن ملاحظات...",
                         hintStyle: const TextStyle(color: Colors.purple),
@@ -69,9 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              taskProvider.tasks.isEmpty
+              taskProvider.filteredTasks.isEmpty
                   ? EmptyTasks()
-                  : TasksListView(tasks: taskProvider.tasks),
+                  : TasksListView(tasks: taskProvider.filteredTasks),
             ],
           );
         },

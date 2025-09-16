@@ -3,7 +3,6 @@ import 'package:notes2_app/home/models/task.dart';
 import 'package:notes2_app/home/provider/task_provider.dart';
 import 'package:provider/provider.dart';
 
-
 class EditTask extends StatelessWidget {
   final Task task;
 
@@ -11,8 +10,12 @@ class EditTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController titleController = TextEditingController(text: task.title);
-    TextEditingController contentController = TextEditingController(text: task.content);
+    TextEditingController titleController = TextEditingController(
+      text: task.title,
+    );
+    TextEditingController contentController = TextEditingController(
+      text: task.content,
+    );
 
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
@@ -25,6 +28,10 @@ class EditTask extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 22,
           ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
           TextButton(

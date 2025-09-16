@@ -23,25 +23,57 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
-      appBar: AppBar(
-        backgroundColor: Colors.purple,
-        title: const Text(
-          "مهامي",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
-        centerTitle: true,
-      ),
       body: Consumer<TaskProvider>(
         builder: (context, taskProvider, child) {
-          if (taskProvider.tasks.isEmpty) {
-            return const EmptyTasks();
-          } else {
-            return TasksListView(tasks: taskProvider.tasks);
-          }
+          return Column(
+            children: [
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.purple,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(25),
+                    bottomRight: Radius.circular(25),
+                  ),
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 12),
+                    Text(
+                      "ملاحظاتى",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "ابحث عن ملاحظات...",
+                        hintStyle: const TextStyle(color: Colors.purple),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Colors.purple,
+                        ),
+                        fillColor: Colors.blueGrey[100],
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      style: const TextStyle(color: Colors.purple),
+                    ),
+                  ],
+                ),
+              ),
+              taskProvider.tasks.isEmpty
+                  ? EmptyTasks()
+                  : TasksListView(tasks: taskProvider.tasks),
+            ],
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

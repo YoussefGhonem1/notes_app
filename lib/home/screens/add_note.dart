@@ -3,7 +3,6 @@ import 'package:notes2_app/home/models/task.dart';
 import 'package:notes2_app/home/provider/task_provider.dart';
 import 'package:provider/provider.dart';
 
-
 class AddTask extends StatelessWidget {
   const AddTask({super.key});
 
@@ -23,6 +22,10 @@ class AddTask extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 22,
           ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
           TextButton(

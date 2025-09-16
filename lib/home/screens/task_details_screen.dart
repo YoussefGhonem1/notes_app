@@ -13,12 +13,16 @@ class TaskDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: Text(
-          task.title,
+          "ملاحظه",
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 22,
           ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: Padding(
@@ -27,31 +31,18 @@ class TaskDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
+              "الملاحظة:",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(task.title, style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 20),
+            const Text(
               "التفاصيل:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text(
-              task.content,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                const Text(
-                  "الحالة:",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  task.isCompleted ? "مكتملة" : "غير مكتملة",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: task.isCompleted ? Colors.green : Colors.red,
-                  ),
-                ),
-              ],
-            ),
+            Text(task.content, style: const TextStyle(fontSize: 16)),
           ],
         ),
       ),
